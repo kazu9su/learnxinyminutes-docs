@@ -20,62 +20,62 @@ JVM、または[the MoarVM](http://moarvm.com)上で動作します。
 `#=>` は、コマンド実行の際のアウトプットを示します
 
 ```perl
-# Single line comment start with a pound
+# 単一行のコメントは'#'で始めます
 
 #`(
-  Multiline comments use #` and a quoting construct.
-  (), [], {}, 「」, etc, will work.
+  複数行のコメントは #` とクォート構造を使います
+  (), [], {}, 「」などが使用できます
 )
 
-### Variables
+### 変数
 
-# In Perl 6, you declare a lexical variable using `my`
+# Perl 6では、静的変数の定義にmy を使います
 my $variable;
-# Perl 6 has 4 kinds of variables:
+# Perl 6 には4種類の変数があります:
 
-## * Scalars. They represent a single value. They start with a `$`
+## * スカラー数。 単一の値を表します。 $ で始めます。
 
 my $str = 'String';
-# double quotes allow for interpolation (which we'll see later):
+# ダブルクォートは, 変数の挿入を許可します。(後で詳しく説明します)
 my $str2 = "String";
 
-# variable names can contain but not end with simple quotes and dashes,
-#  and can contain (and end with) underscores :
-# my $weird'variable-name_ = 5; # works !
+# 変数名には、名前の最後でなければシングルクォートとハイフンを使用することができます。
+# アンダースコアならば、最後にも使用することができます。:
+# my $weird'variable-name_ = 5; # 動きます！
 
-my $bool = True; # `True` and `False` are Perl 6's boolean
-my $inverse = !$bool; # You can invert a bool with the prefix `!` operator
-my $forced-bool = so $str; # And you can use the prefix `so` operator
-                           # which turns its operand into a Bool
+my $bool = True; # `True` と `False` は、Perl 6のブーリアン値です
+my $inverse = !$bool; # 接頭辞に`!`を使ってブール値を逆にできます。
+my $forced-bool = so $str; # 接頭辞に`so`を使えば、オペランドをブール値に変換できます
 
-## * Lists. They represent multiple values. Their name start with `@`.
+## * リスト。リストは複数の値を表します。 @で始めます。
 
 my @array = 'a', 'b', 'c';
-# equivalent to :
-my @letters = <a b c>; # array of words, delimited by space.
-                     # Similar to perl5's qw, or Ruby's %w.
+# これは、以下と同様です:
+my @letters = <a b c>; # スペースで句切られた単語の配列
+                     # Perl5のqw, Rubyの %wと同様です
 my @array = 1, 2, 3;
 
-say @array[2]; # Array indices start at 0 -- This is the third element
+say @array[2]; # 配列のindexは0から始まります -- これは第三の要素です
 
-say "Interpolate an array using [] : @array[]";
-#=> Interpolate an array using [] : 1 2 3
+say "[] を使って配列を文字列に挿入できます。 : @array[]";
+#=> [] を使って配列を文字列に挿入できます。 : 1 2 3
 
-@array[0] = -1; # Assign a new value to an array index
-@array[0, 1] = 5, 6; # Assign multiple values
+@array[0] = -1; # 新しい値を配列のインデックスに割り当てます
+@array[0, 1] = 5, 6; # 複数の値を割り当てます
 
 my @keys = 0, 2;
-@array[@keys] = @letters; # Assign using an array
+@array[@keys] = @letters; # 配列を利用して割り当てます
 say @array; #=> a 6 b
 
-## * Hashes, or key-value Pairs.
-# Hashes are actually arrays of Pairs
-# (you can construct a Pair object using the syntax `Key => Value`),
-#  except they get "flattened" (hash context), removing duplicated keys.
+## * ハッシュ、またはキーバリュー(key-value)のペア
+# ハッシュは、実際にはキーバリューのペアの配列です
+# (`Key => Value`のシンタックスを使って、ペアのオブジェクトを構成できます)
+# 重複しているキーが削除された、フラットな状態(ハッシュコンテキスト)を期待します
+
 my %hash = 1 => 2,
            3 => 4;
-my %hash = foo => "bar", # keys get auto-quoted
-            "some other" => "value", # trailing commas are okay
+my %hash = foo => "bar", # キーは自動的にクォートされます
+            "some other" => "value", #最後にコンマがあってもオッケーです
             ;
 my %hash = <key1 value1 key2 value2>; # you can also create a hash
                                       # from an even-numbered array
