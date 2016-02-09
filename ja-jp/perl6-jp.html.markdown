@@ -75,30 +75,28 @@ say @array; #=> a 6 b
 my %hash = 1 => 2,
            3 => 4;
 my %hash = foo => "bar", # キーは自動的にクォートされます
-            "some other" => "value", #最後にコンマがあってもオッケーです
+            "some other" => "value", #最後(;の前)にコンマがあってもオッケーです
             ;
-my %hash = <key1 value1 key2 value2>; # you can also create a hash
-                                      # from an even-numbered array
-my %hash = key1 => 'value1', key2 => 'value2'; # same as this
+my %hash = <key1 value1 key2 value2>; # 偶数の配列からもハッシュを生成できます
+my %hash = key1 => 'value1', key2 => 'value2'; # これと同一です
 
-# You can also use the "colon pair" syntax:
-# (especially handy for named parameters that you'll see later)
-my %hash = :w(1), # equivalent to `w => 1`
-           # this is useful for the `True` shortcut:
-           :truey, # equivalent to `:truey(True)`, or `truey => True`
-           # and for the `False` one:
-           :!falsey, # equivalent to `:falsey(False)`, or `falsey => False`
+# 同様に"コロンペア(colon pair)"シンタックスも使用できます:
+# (特に、後に出てくる名前付きパラメータの場合に便利です)
+my %hash = :w(1), # `w => 1` と同様です
+           # これは、`True`の省略に役立ちます:
+           :truey, # `:truey(True)`, または `truey => True`と同様です
+           # `False`はこうです:
+           :!falsey, # `:falsey(False)`, または `falsey => False`と同様です
            ;
 
-say %hash{'key1'}; # You can use {} to get the value from a key
-say %hash<key2>;   # If it's a string, you can actually use <>
-                   # (`{key1}` doesn't work, as Perl6 doesn't have barewords)
+say %hash{'key1'}; # キーから バリューを取得するには、{}を使用します
+say %hash<key2>;   # もし文字列なら、<>を使用できます
+                   # (Perl 6には、barewordは存在しないので、`{key1}`は動きません)
 
-## * Subs (subroutines, or functions in most other languages).
+## * Subs (サブルーチン、または他の多くの言語における関数).
 sub say-hello { say "Hello, world" }
 
-sub say-hello-to(Str $name) { # You can provide the type of an argument
-                              # and it'll be checked at compile-time.
+sub say-hello-to(Str $name) { # 引数の型を定義できます。この型は、コンパイル時にチェックされます
 
     say "Hello, $name !";
 }
