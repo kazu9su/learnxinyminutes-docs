@@ -101,17 +101,18 @@ sub say-hello-to(Str $name) { # 引数の型を定義できます。この型は
     say "Hello, $name !";
 }
 
+## 任意の引数を持つこともできます
 ## It can also have optional arguments:
-sub with-optional($arg?) { # the "?" marks the argument optional
-  say "I might return `(Any)` (Perl's 'null'-like value) if I don't have
-        an argument passed, or I'll return my argument";
+sub with-optional($arg?) { # "?"は、任意の引数を表します
+  say "この関数は、もし引数を何も受け取らなかったら、`Any`(Perlでいうと、'null'のようなものです)を返します
+        引数を受け取れば、それを返します";
   $arg;
 }
-with-optional; # returns Any
-with-optional(); # returns Any
-with-optional(1); # returns 1
+with-optional; # Any を返します
+with-optional(); # Any を返します
+with-optional(1); # 1 を返します
 
-## You can also give them a default value when they're not passed:
+## もし引数がない場合に、デフォルトの値を与えることもできます
 sub hello-to($name = "World") {
   say "Hello, $name !";
 }
@@ -119,36 +120,36 @@ hello-to; #=> Hello, World !
 hello-to(); #=> Hello, World !
 hello-to('You'); #=> Hello, You !
 
-## You can also, by using a syntax akin to the one of hashes (yay unified syntax !),
-##  pass *named* arguments to a `sub`.
-# They're optional, and will default to "Any".
+## デフォルト値に、ハッシュと同様のシンタックスを使用することもできます(もちろん ! シンタックスも使えます),
+##  `sub`に *named* 引数を渡します.
+# それは任意なので、デフォルトでは"Any"を返します
 sub with-named($normal-arg, :$named) {
   say $normal-arg + $named;
 }
 with-named(1, named => 6); #=> 7
-# There's one gotcha to be aware of, here:
-# If you quote your key, Perl 6 won't be able to see it at compile time,
-#  and you'll have a single Pair object as a positional parameter,
-#  which means this fails:
+# ここで、一つの注意点があります。以下です:
+# もし、keyをクォートした場合、Perl 6 はコンパイル時、それを知ることはできず、
+# 固定パラメータのペアオブジェクトとして扱われます
+# つまり、次のプログラムは失敗します
 with-named(1, 'named' => 6);
 
 with-named(2, :named(5)); #=> 7
 
-# To make a named argument mandatory, you can use `?`'s inverse, `!`
+# 名前付き引数を必須にするために、`?`の逆を表す、`!`を使えます
 sub with-mandatory-named(:$str!)  {
   say "$str !";
 }
 with-mandatory-named(str => "My String"); #=> My String !
-with-mandatory-named; # run time error: "Required named parameter not passed"
-with-mandatory-named(3); # run time error: "Too many positional parameters passed"
+with-mandatory-named; # ランタイムエラー: "必要な名前付き引数が渡されませんでした"
+with-mandatory-named(3); # ランタイムエラー: 想定以上の固定パラメータが渡されました"
 
-## If a sub takes a named boolean argument ...
+## もし、関数が、名前付きのブーリアン値を引数として保つ場合...
 sub takes-a-bool($name, :$bool) {
-  say "$name takes $bool";
+  say "$name は $bool です";
 }
-# ... you can use the same "short boolean" hash syntax:
-takes-a-bool('config', :bool); # config takes True
-takes-a-bool('config', :!bool); # config takes False
+# ... "省略ブーリアン型"のハッシュシンタックスを使うこともできます
+takes-a-bool('config', :bool); # config  は True です
+takes-a-bool('config', :!bool); # config は False です
 
 ## You can also provide your named arguments with defaults:
 sub named-def(:$def = 5) {
