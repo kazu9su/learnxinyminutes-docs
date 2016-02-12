@@ -151,14 +151,16 @@ sub takes-a-bool($name, :$bool) {
 takes-a-bool('config', :bool); # config  は True です
 takes-a-bool('config', :!bool); # config は False です
 
-## You can also provide your named arguments with defaults:
+## デフォルト値を名前付き引数にセットすることもできます:
 sub named-def(:$def = 5) {
   say $def;
 }
 named-def; #=> 5
 named-def(def => 15); #=> 15
 
-# Since you can omit parenthesis to call a function with no arguments,
+# 引数なしの関数を括弧を省略して呼び出せる故に、
+# 変数に`say-hello`を保存するため、"&" を名前中で使用する必要があります
+# Since you can omit parenthesis to call a function with no arguments,dddd
 #  you need "&" in the name to store `say-hello` in a variable.
 my &s = &say-hello;
 my &other-s = sub { say "Anonymous function !" }
