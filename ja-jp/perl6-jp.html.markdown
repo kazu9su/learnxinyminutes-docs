@@ -165,24 +165,22 @@ named-def(def => 15); #=> 15
 my &s = &say-hello;
 my &other-s = sub { say "Anonymous function !" }
 
-# A sub can have a "slurpy" parameter, or "doesn't-matter-how-many"
-sub as-many($head, *@rest) { # `*@` (slurpy) will basically "take everything else".
-                             # Note: you can have parameters *before* (like here)
-                             # a slurpy one, but not *after*.
+# 関数は"slurpy"な、"どれだけ多くても関係ない"パラメータも指定できます
+sub as-many($head, *@rest) { # `*@` (slurpy) は基本的に、"それ以外の全ての値"です.
+                             # Note: この例のように、 slurpy パラメータより、前にパラメータを指定できますが、
+                             # slurpyパラメータより前には指定できません
   say @rest.join(' / ') ~ " !";
 }
 say as-many('Happy', 'Happy', 'Birthday'); #=> Happy / Birthday !
-                                           # Note that the splat (the *) did not
-                                           # consume the parameter before.
+                                           # `*@rest` には、第一引数のパラメータは含まれていません
 
-## You can call a function with an array using the
-# "argument list flattening" operator `|`
-# (it's not actually the only role of this operator, but it's one of them)
+## 関数の呼び出し時、"引数のリストをフラットにする" `|`オペレータを使って配列を指定できます
+# (これは、このオペレータの数ある使い方のうちの一つです)
 sub concat3($a, $b, $c) {
   say "$a, $b, $c";
 }
 concat3(|@array); #=> a, b, c
-                  # `@array` got "flattened" as a part of the argument list
+                  # `@array`は引数リストの一部としてフラットにされます
 
 ### Containers
 # In Perl 6, values are actually stored in "containers".
