@@ -182,37 +182,36 @@ sub concat3($a, $b, $c) {
 concat3(|@array); #=> a, b, c
                   # `@array`は引数リストの一部としてフラットにされます
 
-### Containers
-# In Perl 6, values are actually stored in "containers".
+### コンテナ
+# Perl 6 では、値は、実際には「コンテナ」に保存されます
+# 代入演算子は保存するコンテナを左に、保存する値を右に要求します
 # The assignment operator asks the container on the left to store the value on
-#  its right. When passed around, containers are marked as immutable.
-# Which means that, in a function, you'll get an error if you try to
-#  mutate one of your arguments.
-# If you really need to, you can ask for a mutable container using `is rw`:
+# 代入後は、コンテナはイミュータブル(不変である)として扱われます
+# それは、関数内で、引数のうち、可変であるものを使おうとした場合、
+# エラーになるということです
+# もし本当にそれが必要ならば、`is rw` を使用することで、可変コンテナとして扱うことができます
 sub mutate($n is rw) {
   $n++;
   say "\$n is now $n !";
 }
 
-# If what you want a copy instead, use `is copy`.
+# もしコピーが欲しい場合は、 `is copy` を使います
 
-# A sub itself returns a container, which means it can be marked as rw:
+# 関数自身がコンテナを返す場合、関数が rw として認識されることを意味します
 my $x = 42;
 sub x-store() is rw { $x }
-x-store() = 52; # in this case, the parentheses are mandatory
-                # (else Perl 6 thinks `x-store` is an identifier)
+x-store() = 52; # この場合、パラメータは必須です
+                # (もしくはPerl6 は、 `x-store` を識別子(ID)として認識します)
 say $x; #=> 52
 
 
-### Control Flow Structures
-## Conditionals
+### 制御構造
+## 条件文
 
 # - `if`
-# Before talking about `if`, we need to know which values are "Truthy"
-#  (represent True), and which are "Falsey" (or "Falsy") -- represent False.
-# Only these values are Falsey: 0, (), {}, "", Nil, A type (like `Str` or `Int`),
-#  and of course False itself.
-# Every other value is Truthy.
+# `if` のことを述べる前に、私たちはどの値が"真"(True)か、"偽"(False)を知る必要があります
+# 次の値のみが、偽を表します : 0, (), {}, "", Nil, 型 (`Str` や `Int`), それと、False それ自身です。
+# 他の全ての値は真です
 if True {
   say "It's true !";
 }
@@ -221,43 +220,42 @@ unless False {
   say "It's not false !";
 }
 
-# As you can see, you don't need parentheses around conditions.
-# However, you do need the brackets around the "body" block:
-# if (true) say; # This doesn't work !
+# ご覧のように、条件文に括弧は不要です
+# しかし、ボディ部分には必ず波括弧が必要です : 
+# if (true) say; # これは動きません!
 
-# You can also use their postfix versions, with the keyword after:
+# if キーワードを文の後ろに持ってくることで、後置法が使えます
 say "Quite truthy" if True;
 
 # - Ternary conditional, "?? !!" (like `x ? y : z` in some other languages)
 my $a = $condition ?? $value-if-true !! $value-if-false;
 
-# - `given`-`when` looks like other languages' `switch`, but much more
-# powerful thanks to smart matching and thanks to Perl 6's "topic variable", $_.
+# - `given` - `when` 構文は、他言語の `switch` の用に見えますが、
+# スマートマッチと、Perl 6 の"トピック変数"である $_のおかげで、はるかに強力です
 #
-# This variable contains the default argument of a block,
-#  a loop's current iteration (unless explicitly named), etc.
+# この変数は、コードブロックのデフォルトの引数であり、ループ処理のカレントイテレーションである。(特に名前が指定されていないかぎり)
 #
-# `given` simply puts its argument into `$_` (like a block would do),
-#  and `when` compares it using the "smart matching" (`~~`) operator.
+# `given` はその引数を単純に `$_` に挿入し(コードブロックがそうするように)、
+# `when` はスマートマッチ演算子(~~)を使ってそれを比較します
 #
-# Since other Perl 6 constructs use this variable (as said before, like `for`,
-# blocks, etc), this means the powerful `when` is not only applicable along with
-# a `given`, but instead anywhere a `$_` exists.
+# 他のPerl 6 の構文がこの変数を使用した(先に述べた `for` 構文など)ので、
+# 強力な `when` は、 `given` 構文だけでなく、 `$_` が存在すれば使えるようになりました。
 given "foo bar" {
   say $_; #=> foo bar
-  when /foo/ { # Don't worry about smart matching yet – just know `when` uses it.
-               # This is equivalent to `if $_ ~~ /foo/`.
+  when /foo/ { # スマートマッチをしていないのではありません - `when` は何もせずともそれを使うのです
+               # これは、　`if $_ ~~ /foo/` と同じです
     say "Yay !";
   }
-  when $_.chars > 50 { # smart matching anything with True (`$a ~~ True`) is True,
-                       # so you can also put "normal" conditionals.
-                       # This when is equivalent to this `if`:
-                       #  if $_ ~~ ($_.chars > 50) {...}
-                       # Which means:
+  when $_.chars > 50 { # スマートマッチを真(`$a ~~ True`)になる何かと使えば、それは真です
+                       # つまり"普通の"条件文も使えます
+                       # この `when` はこの `if`:
+                       #  if $_ ~~ d($_.chars > 50) {...}
+                       # と同じです
+                       # つまりこういうことです:
                        #  if $_.chars > 50 {...}
     say "Quite a long string !";
   }
-  default { # same as `when *` (using the Whatever Star)
+  default { # `when *`(アスタリスクを使用する場合)と同じです
     say "Something else"
   }
 }
